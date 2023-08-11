@@ -1,21 +1,22 @@
 package main
 
 import (
-	"runtime"
+	"go-microservices/internal/book"
+	"go-microservices/internal/product"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
-	router.GET("/hello", func(c *gin.Context) {
+	router.Use(cors.Default())
+	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "Hello World!",
+			"message": "Check cors",
 		})
 	})
-
-	router.GET("/os", func(c *gin.Context) {
-		c.String(200, runtime.GOOS)
-	})
+	book.SetupRoutes(router)
+	product.SetupRoutes(router)
 	router.Run(":8080")
 }
