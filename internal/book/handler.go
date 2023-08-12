@@ -1,6 +1,8 @@
 package book
 
 import (
+	"go-microservices/playground"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +14,10 @@ func SetupRoutes(router *gin.Engine) {
 }
 
 func getHandler(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Check book",
-	})
+	list := playground.GetBooks()
+	err := list.ToJSON(c.Writer)
+	if err != nil {
+		c.Status(500)
+		return
+	}
 }
